@@ -1,23 +1,106 @@
-# Carpetas de compilación
+# -------------------------------
+# VISUAL STUDIO / .NET BUILD
+# -------------------------------
+
+.vs/
+*.user
+*.suo
+*.sln.docstates
+*.vsidx
+
 bin/
 obj/
 out/
 TestResults/
+Generated_Code/
 
-# Archivos de configuración sensibles
-appsettings*.json
+# -------------------------------
+# NUGET / PAQUETES / NODE
+# -------------------------------
 
-# Archivos temporales y logs
+*.nupkg
+*.snupkg
+packages/
+node_modules/
+package-lock.json
+
+# -------------------------------
+# LOGS / BDs / TEMPORALES
+# -------------------------------
+
 *.log
-*.tmp
+*.vsidx
+*.db
+*.sqlite
 *.bak
+*.tmp
 
-# VSCode/IDE
+# -------------------------------
+# CONFIG SENSIBLE
+# -------------------------------
+
+appsettings.json
+appsettings.Development.json
+appsettings.Local.json
+appsettings.*.json
+.env
+*.secret.json
+# Permitir template versionable
+!appsettings.Example.json
+!appsettings.Template.json
+
+# -------------------------------
+# DOCKER
+# -------------------------------
+
+**/Dockerfile
+**/docker-compose*.yml
+
+# -------------------------------
+# GIT / IDE / OTROS
+# -------------------------------
+
+*.orig
+*.rej
+*.swn
+*.swp
+.idea/
 .vscode/
+
+# -------------------------------
+# WINDOWS / OTROS
+# -------------------------------
+
+Thumbs.db
+desktop.ini
+ehthumbs.db
+.DS_Store
+
+# -------------------------------
+# ARCHIVOS EXTRAS PARA FRONTEND
+# -------------------------------
+
+wwwroot/lib/
+
+# -------------------------------
+# VISUAL STUDIO / .NET BUILD
+# -------------------------------
+
+## VS Config y metadata
+.vs/
 *.user
 *.suo
-.idea/
+*.vsidx
+*.sln.docstates
 
-# Otros
-node_modules/
-.env
+## Build outputs
+bin/
+obj/
+out/
+TestResults/
+Generated_Code/
+
+# permitir templates
+!appsettings.Example.json
+!appsettings.Template.json
+Properties/serviceDependencies.local.json
