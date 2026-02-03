@@ -155,4 +155,4 @@ LegalApp forma parte de un **portafolio profesional** y está pensado para:
 - entrevistas
 - evaluación de criterio de ingeniería
 
-**Autor:** @Derox1
+**Autor:** Bastian Matias , Desarrollador Fullstack 
