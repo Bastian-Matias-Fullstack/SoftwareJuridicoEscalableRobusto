@@ -6,6 +6,25 @@
     void mensajeError.offsetWidth;          // Trigger reflow
     mensajeError.classList.add("shake");    // Aplicar animación
 }
+// ===============================
+// Demo Context Handling (SE2)
+// ===============================
+function getDemoContextFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const demo = (params.get("demo") || "").toLowerCase();
+
+    const allowed = ["casos", "roles", "usuarios"];
+    return allowed.includes(demo) ? demo : null;
+}
+
+const demoContext = getDemoContextFromUrl();
+
+if (demoContext) {
+    sessionStorage.setItem("demoContext", demoContext);
+} else {
+    sessionStorage.removeItem("demoContext");
+}
+
 
 document.getElementById("loginForm").addEventListener("submit", async function (e) {
     e.preventDefault();

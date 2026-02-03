@@ -3,7 +3,7 @@
 // ===========================
 let choicesUsuarios;
 let choicesRoles;
-const apiBase = "https://localhost:7266/api";
+const apiBase = "/api";
 
 async function cargarUsuarios() {
     const res = await fetch(`${apiBase}/usuarios`, {
@@ -260,6 +260,7 @@ function verificarAccesoPorRol(rolesPermitidos = []) {
 // ===========================
 window.initRolesModule = function () {
     if (!verificarAccesoPorRol(["Admin"])) return;
+    document.getElementById("seccion-gestion-roles")?.classList.remove("d-none");
 
     // Aquí va TODO lo que ya tenías en tu roles.js
     choicesUsuarios = new Choices("#selectUsuarios", {
