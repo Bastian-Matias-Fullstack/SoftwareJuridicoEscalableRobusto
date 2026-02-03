@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Aplicacion.DTO
 {
     public class CerrarCasoRequest
     {
+        [StringLength(1000)]
         public string? MotivoCierre { get; set; }
-
     }
 }

@@ -16,15 +16,11 @@ namespace Aplicacion.Servicios.Casos
         public async Task<ResultadoPaginadoConResumen<CasoDto>> EjecutarAsync(FiltroCasosRequest filtro)
         {
             var query = _casoRepository.ObtenerQueryable();
-
             // Filtro por estado
             if (!string.IsNullOrWhiteSpace(filtro.Estado) && Enum.TryParse<EstadoCaso>(filtro.Estado, true, out var estadoEnum))
             {
                 query = query.Where(c => c.Estado == estadoEnum);
-
-
             }
-
             // Búsqueda por texto libre
             if (!string.IsNullOrWhiteSpace(filtro.Buscar))
             {
@@ -32,7 +28,6 @@ namespace Aplicacion.Servicios.Casos
                     c.Titulo.Contains(filtro.Buscar) ||
                     c.Cliente.Nombre.Contains(filtro.Buscar));
             }
-
             // Ordenamiento dinámico
             query = filtro.Orden switch
             {
@@ -42,13 +37,10 @@ namespace Aplicacion.Servicios.Casos
                 "titulo_desc" => query.OrderByDescending(c => c.Titulo),
                 _ => query.OrderByDescending(c => c.Id)
             };
-
             // Total sin paginar
             var total = await query.CountAsync();
-
             // Paginación
             var skip = (filtro.Pagina - 1) * filtro.Tamanio;
-
             var items = await query
                 .Skip(skip)
                 .Take(filtro.Tamanio)
@@ -58,7 +50,10 @@ namespace Aplicacion.Servicios.Casos
                     Titulo = c.Titulo,
                     Estado = c.Estado,
                     FechaCreacion = c.FechaCreacion,
+                    ClienteId = c.ClienteId,          
                     NombreCliente = c.Cliente.Nombre,
+                    Descripcion = c.Descripcion ?? "",
+                    MotivoCierre = c.MotivoCierre ?? "",
                     TipoCaso = c.TipoCaso
                 })
                 .ToListAsync();
@@ -66,7 +61,7 @@ namespace Aplicacion.Servicios.Casos
             {
                 Total = total,
                 Pendientes = await query.CountAsync(c => c.Estado == EstadoCaso.Pendiente),
-                Resueltos = await query.CountAsync(c => c.Estado == EstadoCaso.Cerrado || c.Estado == EstadoCaso.Cerrado)
+                Resueltos = await query.CountAsync(c => c.Estado == EstadoCaso.Cerrado)
             };
             return new ResultadoPaginadoConResumen<CasoDto>
             {
@@ -75,10 +70,8 @@ namespace Aplicacion.Servicios.Casos
                 Pagina = filtro.Pagina,
                 Tamanio = filtro.Tamanio,
                 TotalPaginas = (int)Math.Ceiling((double)total / filtro.Tamanio), // ✅ Línea nueva
-
                 Resumen = resumen
             };
         }
-
     }
 }

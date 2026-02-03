@@ -1,13 +1,7 @@
 ﻿using Aplicacion.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicacion.DTO
 {
-    
         public class ResultadoCasosResponse
         {
             public int Total { get; set; } // Total de casos en la base de datos
@@ -17,5 +11,4 @@ namespace Aplicacion.DTO
             public List<CasoDto> Items { get; set; } = new(); // Casos para esta página
 
         }
-    
 }

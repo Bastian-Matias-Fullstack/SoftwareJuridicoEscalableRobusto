@@ -4,10 +4,6 @@ using Aplicacion.Servicios.Auth;
 using Aplicacion.DTO;
 using Infraestructura.Persistencia;
 using Microsoft.EntityFrameworkCore;
-using Dominio.Entidades;
-using Microsoft.AspNetCore.Identity;
-using Infraestructura.Servicios;
-
 
 [ApiController]
 [Route("api/[controller]")]
@@ -16,7 +12,6 @@ public class AuthController : ControllerBase
     private readonly IJwtService _jwtService;
     private readonly AppDbContext _context;
     private readonly IHashService _hashService;
-
 
     public AuthController(AppDbContext context,  IJwtService jwtService, IHashService hashService)
     {
@@ -36,12 +31,6 @@ public class AuthController : ControllerBase
            .Include(u => u.UsuarioRoles)
            .ThenInclude(ur => ur.Rol)
            .FirstOrDefaultAsync(u => u.Email == dto.Email);
-
-            if (usuario == null)
-                return Unauthorized("Usuario no encontrado");
-
-
-
 
             if (usuario == null)
                 return Unauthorized("Usuario no encontrado");

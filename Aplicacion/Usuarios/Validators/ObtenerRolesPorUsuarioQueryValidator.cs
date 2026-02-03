@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aplicacion.Usuarios.Queries;
+﻿using Aplicacion.Usuarios.Queries;
 using FluentValidation;
 
 public class ObtenerRolesPorUsuarioQueryValidator : AbstractValidator<ObtenerRolesPorUsuarioQuery>

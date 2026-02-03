@@ -2,29 +2,21 @@
 using Aplicacion.Usuarios.Commands;
 using Dominio.Entidades;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicacion.Usuarios.Handlers
 {
     // Este handler responde al comando AsignarRolAUsuarioCommand
     // y no retorna datos (por eso usamos Unit como tipo de retorno).
-
     public class AsignarRolAUsuarioCommandHandler : IRequestHandler<AsignarRolAUsuarioCommand, Unit>
     {
         private readonly IUsuarioRepositorio _usuarioRepositorio;
         private readonly IRolRepositorio _rolRepositorio;
-
         // Inyectamos los repositorios necesarios: Usuario y Rol
         public AsignarRolAUsuarioCommandHandler(IUsuarioRepositorio usuarioRepositorio, IRolRepositorio rolRepositorio)
         {
             _usuarioRepositorio = usuarioRepositorio;
             _rolRepositorio = rolRepositorio;
         }
-
         // Método principal que maneja el comando cuando se ejecuta Mediator.Send(...)
         public async Task<Unit> Handle(AsignarRolAUsuarioCommand request, CancellationToken cancellationToken)
         {
@@ -34,7 +26,8 @@ namespace Aplicacion.Usuarios.Handlers
                 throw new Exception("Usuario no encontrado");
 
             // Paso 2: Validamos que el rol exista
-            var rol = await _rolRepositorio.ObtenerPorNombreAsync(request.NombreRol);
+            var nombreRol = request.NombreRol.Trim();
+            var rol = await _rolRepositorio.ObtenerPorNombreAsync(nombreRol);
             if (rol == null)
                 throw new Exception("Rol no encontrado");
 
@@ -57,13 +50,6 @@ namespace Aplicacion.Usuarios.Handlers
             // Indicamos que la operación fue exitosa (sin retorno de datos)
             return Unit.Value;
 
-
-
         }
-
-
-
-
-
     }
 }

@@ -15,13 +15,11 @@ namespace Aplicacion.Servicios.Auth
         {
             _config = config;
         }
-
         public string GenerarToken(string email, int usuarioId, List<string> roles)
         {
             var jwt = _config.GetSection("Jwt");
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt["Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
             // Claims base
             var claims = new List<Claim>
             {
@@ -29,13 +27,11 @@ namespace Aplicacion.Servicios.Auth
                 new Claim(ClaimTypes.NameIdentifier, usuarioId.ToString()),
                 new Claim(ClaimTypes.Name, email),
             };
-
             // Claims de roles
             foreach (var rol in roles)
             {
                 claims.Add(new Claim(ClaimTypes.Role, rol));
             }
-
             var token = new JwtSecurityToken(
                 issuer: jwt["Issuer"],
                 audience: jwt["Audience"],

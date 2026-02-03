@@ -1,10 +1,6 @@
-﻿using Aplicacion.Repositorio;
+﻿using Aplicacion.Excepciones;
+using Aplicacion.Repositorio;
 using Dominio.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicacion.Servicios
 {
@@ -19,15 +15,19 @@ namespace Aplicacion.Servicios
 
         public async Task EjecutarAsync(int id)
         {
-            var caso = await _repositorio.ObtenerPorIdAsync(id); // ← buscas el caso primero
+            // 1. Buscar el caso
+            var caso = await _repositorio.ObtenerPorIdAsync(id);
+
+            // 2. Regla de dominio: el caso debe existir
             if (caso == null)
-                throw new Exception("El caso no existe.");
+                throw new NotFoundException($"No existe un caso con id {id}.");
 
-            // Validación crítica: no permitir eliminar si está cerrado
+            // 3. Regla de negocio: no se puede eliminar un caso cerrado
             if (caso.Estado == EstadoCaso.Cerrado)
-                throw new InvalidOperationException("No se puede eliminar un caso cerrado.");
+                throw new BusinessConflictException("No se puede eliminar un caso cerrado.");
 
-            await _repositorio.EliminarAsync(caso); // ← pasas el objeto completo
+            // 4. Eliminación válida
+            await _repositorio.EliminarAsync(caso);
         }
     }
 }

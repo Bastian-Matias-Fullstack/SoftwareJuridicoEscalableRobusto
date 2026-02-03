@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Aplicacion.DTO
+﻿namespace Aplicacion.DTO
 {
     public class CerrarCasoResultado
     {
@@ -13,6 +7,5 @@ namespace Aplicacion.DTO
         public bool EsErrorNegocio { get; set; } // true si es un error esperable tipo "ya estaba cerrado"
         public bool NoEncontrado { get; set; }   // true si no existe el caso
         public bool ErrorTecnico { get; set; } // Solo si quieres marcar errores no esperados
-
     }
 }

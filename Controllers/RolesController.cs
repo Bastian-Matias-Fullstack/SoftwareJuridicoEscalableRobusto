@@ -15,14 +15,11 @@ namespace API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMediator _mediator;
-
-
         public RolesController(AppDbContext context, IMediator mediator)
         {
             _context = context;
             _mediator = mediator;
         }
-
         [HttpGet]
         public async Task<IActionResult> ObtenerRoles()
         {
@@ -32,7 +29,6 @@ namespace API.Controllers
 
             return Ok(roles);
         }
-
         [HttpGet("{usuarioId}")]
         public async Task<IActionResult> ObtenerRolesAsignados(int usuarioId)
         {

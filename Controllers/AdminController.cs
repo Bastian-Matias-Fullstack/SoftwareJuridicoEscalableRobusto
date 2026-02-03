@@ -1,7 +1,5 @@
-﻿using Dominio.Entidades;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Infraestructura.Persistencia; // Asegúrate de tener esto
 
 namespace API.Controllers

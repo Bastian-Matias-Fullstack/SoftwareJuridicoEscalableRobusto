@@ -18,13 +18,11 @@ namespace Infraestructura.Repositorios
     {
         // Campo privado que almacena la instancia del DbContext
         private readonly AppDbContext _context;
-
         // Constructor: recibe el contexto vía inyección de dependencias
         public RolRepositorio(AppDbContext context)
         {
             _context = context;
         }
-
         // Método asincrónico que busca un rol por su nombre exacto
         public async Task<Rol?> ObtenerPorNombreAsync(string nombre)
         {

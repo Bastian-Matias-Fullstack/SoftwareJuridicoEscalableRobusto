@@ -1,10 +1,5 @@
 ﻿using Aplicacion.DTO;
 using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aplicacion.Validaciones
 {
@@ -17,9 +12,9 @@ namespace Aplicacion.Validaciones
 
             RuleFor(x => x.Descripcion)
                 .MinimumLength(10).WithMessage("La descripción debe tener al menos 10 caracteres.");
-
-            RuleFor(x => x.NombreCliente)
-                .NotEmpty().WithMessage("El nombre del cliente es obligatorio.");
+          
+            RuleFor(x => x.ClienteId)
+         .GreaterThan(0).WithMessage("Debe seleccionar un cliente válido.");
 
             RuleFor(x => x.TipoCaso)
                           .IsInEnum()

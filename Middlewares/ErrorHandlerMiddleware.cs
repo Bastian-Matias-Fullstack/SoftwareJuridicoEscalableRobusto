@@ -1,20 +1,13 @@
-﻿using System.Net;
-using System.Text.Json;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Aplicacion.Excepciones;
-namespace API.Middlewares
 
+namespace API.Middlewares
 {
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ErrorHandlerMiddleware> _logger;
-
-
         public ErrorHandlerMiddleware(RequestDelegate next, ILogger<ErrorHandlerMiddleware> logger)
         {
             _next = next;
@@ -31,32 +24,32 @@ namespace API.Middlewares
                 _logger.LogError(ex, "❌ Error no controlado");
                 var statusCode = ex switch
                 {
-                    NotFoundException => (int)HttpStatusCode.NotFound,
-                    _ => (int)HttpStatusCode.InternalServerError
+                    NotFoundException => StatusCodes.Status404NotFound,
+                    BusinessConflictException => StatusCodes.Status409Conflict,
+                    DomainException => StatusCodes.Status400BadRequest,
+                    _ => StatusCodes.Status500InternalServerError
                 };
-
                 context.Response.StatusCode = statusCode;
                 context.Response.ContentType = "application/json";
-
-                var error = new ProblemDetails
+                var problem = new ProblemDetails
                 {
-                    Status = context.Response.StatusCode,
-                    Title = statusCode == 404 ? "No encontrado" : "Error interno del servidor",
+                    Status = statusCode,
+                    Title = statusCode switch
+                    {
+                        404 => "Recurso no encontrado",
+                        409 => "Conflicto de negocio",
+                        400 => "Solicitud inválida",
+                        _ => "Error interno del servidor"
+                    },
                     Detail = ex.Message,
                     Instance = context.Request.Path
                 };
-
-                var options = new JsonSerializerOptions
+                var json = JsonSerializer.Serialize(problem, new JsonSerializerOptions
                 {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    WriteIndented = false
-                };
-
-                var json = JsonSerializer.Serialize(error, options);
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                });
                 await context.Response.WriteAsync(json);
             }
-
-
         }
     }
 }

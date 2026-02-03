@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Aplicacion.DTO
 {
-
-
-    //solo ingresamos propiedades del caso que se ingresen desde el cliente
-    //resto de informacion se ingresa automaticamente 
     public class CrearCasoRequest
     {
+        [Required]
+        [StringLength(150, MinimumLength = 5)]
         public string Titulo { get; set; } = string.Empty;
+        [StringLength(5000)]
         public string Descripcion {  get; set; } = string.Empty;
-        public string NombreCliente { get; set; } = string.Empty;
+        [Range(1, int.MaxValue)]
+        public int ClienteId { get; set; }
+        [Required]
         public TipoCaso TipoCaso { get; set; }
-
     }
 }

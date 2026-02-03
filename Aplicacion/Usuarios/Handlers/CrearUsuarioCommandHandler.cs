@@ -1,16 +1,9 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Aplicacion.DTOs;
-using Aplicacion.Servicios;
-using Dominio.Entidades;
-using Microsoft.EntityFrameworkCore;
+﻿using Aplicacion.Excepciones;
 using Aplicacion.Repositorio;
 using Aplicacion.Servicios.Auth;
 using Aplicacion.Usuarios.Commands;
+using Dominio.Entidades;
+using MediatR;
 
 
 namespace Aplicacion.Usuarios.Handlers
@@ -23,52 +16,26 @@ namespace Aplicacion.Usuarios.Handlers
 
         // Inyectamos el servicio que nos permite hashear la contraseña
         private readonly IHashService _hashService;
-
-
-
         // Constructor: el framework inyectará las dependencias configuradas en Program.cs
         public CrearUsuarioCommandHandler(IUsuarioRepositorio repositorio, IHashService hashService)
         {
             _repositorio = repositorio;
             _hashService = hashService;
         }
-
-
-        // Este método se ejecuta cuando se llama a Mediator.Send(new CrearUsuarioCommand(...))
         public async Task<int> Handle(CrearUsuarioCommand request, CancellationToken cancellationToken)
         {
-            // Paso 1: Validar si el email ya existe en la base de datos
             var existe = await _repositorio.ExistePorEmailAsync(request.Email);
             if (existe)
-                throw new Exception("El correo ya está registrado."); // Idealmente lanzarías una excepción personalizada
-
-            // Paso 2: Hashear la contraseña antes de guardarla (nunca guardar texto plano)
+                throw new BusinessConflictException("El correo ya está registrado.");
             var passwordHash = _hashService.Hash(request.Password);
 
-            // Paso 3: Crear la entidad de dominio Usuario con los datos recibidos
             var nuevoUsuario = new Usuario(
                 nombre: request.Nombre,
                 email: request.Email,
                 passwordHash: passwordHash
             );
-            // Asignar roles si vienen en la lista
-            //if (request.RolesId != null && request.RolesId.Any())
-            //{
-            //    foreach (var rolId in request.RolesId)
-            //    {
-            //        nuevoUsuario.UsuarioRoles.Add(new UsuarioRol
-            //        {
-            //            Usuario = nuevoUsuario,
-            //            RolId = rolId
-            //        });
-            //    }
-            //}
 
             await _repositorio.CrearUsuarioConRolesAsync(nuevoUsuario);
-
-
-
-            // Paso 5: Devolver el ID generado del nuevo usuario
             return nuevoUsuario.Id;
         }
 

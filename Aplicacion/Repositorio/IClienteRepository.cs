@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Dominio.Entidades;
+﻿using Dominio.Entidades;
 
 namespace Aplicacion.Repositorio
 {
@@ -11,5 +6,6 @@ namespace Aplicacion.Repositorio
     {
         Task<Cliente?> ObtenerPorNombreAsync(string nombre);
         Task CrearAsync(Cliente cliente);
+        Task<Cliente?> ObtenerPorIdAsync(int id);
     }
 }
