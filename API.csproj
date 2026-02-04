@@ -33,7 +33,9 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <Content Remove="appsettings - Copia.Production.json" />
+	  <Content Remove="appsettings.Example.Development.json" />
 	  <Content Remove="appsettings.Example.json" />
+	  <Content Remove="appsettings.Example.Production.json" />
 	  <Content Remove="appsettings.Production.json" />
 	</ItemGroup>
 
@@ -56,10 +58,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="appsettings.Example.json" />
-		<None Include="appsettings.Example.Production.json" />
-		<None Include="appsettings.Production.json" />
-		<None Include="appsettings.json" />
 		<None Include="wwwroot\css\dashboard.css" />
 		<None Include="wwwroot\css\login.css" />
 		<None Include="wwwroot\dashboard.html" />

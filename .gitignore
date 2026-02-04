@@ -102,5 +102,6 @@ Generated_Code/
 
 # permitir templates
 !appsettings.Example.json
+!appsettings.Example.Development.json
 !appsettings.Template.json
 Properties/serviceDependencies.local.json
