@@ -27,13 +27,14 @@ function clearUserFormErrors() {
 // Este módulo carga, crea, edita y elimina usuarios desde el backend usando JWT
 // Punto de entrada del módulo, se llama desde dashboard.html
 function initUsuariosModule() {
-     if (window.__usuariosInitialized) return;
-  window.__usuariosInitialized = true;
-    // Mostrar visualmente la sección de usuarios
-    document.getElementById("seccion-usuarios")?.classList.remove("d-none");
-        configurarEventosUsuarios();
+        document.getElementById("seccion-usuarios")?.classList.remove("d-none");
+    if (!window.__usuariosInitialized) {
+    window.__usuariosInitialized = true;
+    configurarEventosUsuarios();
+  }
     cargarUsuarios();
 }
+window.initUsuariosModule = initUsuariosModule;
 // 🧠 Configura los listeners para botones y formularios
 function configurarEventosUsuarios() {
     document.getElementById("btnNuevoUsuario").addEventListener("click", () => {

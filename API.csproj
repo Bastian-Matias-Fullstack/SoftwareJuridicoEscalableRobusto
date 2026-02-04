@@ -8,38 +8,26 @@
 
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Remove="Aplicacion\bin\**" />
-		<Compile Remove="Aplicacion\obj\**" />
+		<Compile Remove="Aplicacion\**" />
 		<Compile Remove="CasosJuridicosRobusto.Tests\**\*.cs" />
-		<Compile Remove="Dominio\bin\**" />
-		<Compile Remove="Dominio\obj\**" />
-		<Compile Remove="Infraestructura\bin\**" />
-		<Compile Remove="Infraestructura\obj\**" />
+		<Compile Remove="Dominio\**" />
+		<Compile Remove="Infraestructura\**" />
 		<Compile Remove="LegalApp.Tests\**\*.cs" />
 		<Compile Remove="LegalApp.Tests\bin\**" />
 		<Compile Remove="LegalApp.Tests\obj\**" />
-		<Content Remove="Aplicacion\bin\**" />
-		<Content Remove="Aplicacion\obj\**" />
-		<Content Remove="Dominio\bin\**" />
-		<Content Remove="Dominio\obj\**" />
-		<Content Remove="Infraestructura\bin\**" />
-		<Content Remove="Infraestructura\obj\**" />
+		<Content Remove="Aplicacion\**" />
+		<Content Remove="Dominio\**" />
+		<Content Remove="Infraestructura\**" />
 		<Content Remove="LegalApp.Tests\bin\**" />
 		<Content Remove="LegalApp.Tests\obj\**" />
-		<EmbeddedResource Remove="Aplicacion\bin\**" />
-		<EmbeddedResource Remove="Aplicacion\obj\**" />
-		<EmbeddedResource Remove="Dominio\bin\**" />
-		<EmbeddedResource Remove="Dominio\obj\**" />
-		<EmbeddedResource Remove="Infraestructura\bin\**" />
-		<EmbeddedResource Remove="Infraestructura\obj\**" />
+		<EmbeddedResource Remove="Aplicacion\**" />
+		<EmbeddedResource Remove="Dominio\**" />
+		<EmbeddedResource Remove="Infraestructura\**" />
 		<EmbeddedResource Remove="LegalApp.Tests\bin\**" />
 		<EmbeddedResource Remove="LegalApp.Tests\obj\**" />
-		<None Remove="Aplicacion\bin\**" />
-		<None Remove="Aplicacion\obj\**" />
-		<None Remove="Dominio\bin\**" />
-		<None Remove="Dominio\obj\**" />
-		<None Remove="Infraestructura\bin\**" />
-		<None Remove="Infraestructura\obj\**" />
+		<None Remove="Aplicacion\**" />
+		<None Remove="Dominio\**" />
+		<None Remove="Infraestructura\**" />
 		<None Remove="LegalApp.Tests\bin\**" />
 		<None Remove="LegalApp.Tests\obj\**" />
 	</ItemGroup>
@@ -90,10 +78,6 @@
 		<Content Update="wwwroot\videos\fondo-legal.mp4">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="LegalApp.Tests\" />
 	</ItemGroup>
 
 </Project>

@@ -5,7 +5,6 @@ using Aplicacion.Servicios;
 using Aplicacion.Servicios.Auth;
 using Aplicacion.Servicios.Casos;
 using Aplicacion.Validaciones;
-using FluentValidation.AspNetCore;
 using Infraestructura.Persistencia;
 using Infraestructura.Repositorios;
 using Infraestructura.Servicios;
@@ -17,6 +16,8 @@ using Microsoft.OpenApi.Models;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 //Configuración de Servicios (DI)
 var builder = WebApplication.CreateBuilder(args);
@@ -44,14 +45,18 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddHttpContextAccessor();
 //🔹 Validaciones (FluentValidation)
 builder.Services.AddControllers()
-.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CrearCasoRequestValidator>())
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
+
+builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CrearCasoRequestValidator>();
 builder.Services.AddTransient(
     typeof(IPipelineBehavior<,>),
-    typeof(Aplicacion.Validaciones.ValidationBehavior<,>)
+    typeof(ValidationBehavior<,>)
 );
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
@@ -59,16 +64,17 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     options.InvalidModelStateResponseFactory = context =>
     {
         var errors = context.ModelState
-        .Where(e => e.Value != null && e.Value.Errors.Count > 0)
+            .Where(e => e.Value is not null && e.Value.Errors.Count > 0)
             .Select(e => new
             {
                 campo = e.Key,
-                errores = e.Value.Errors.Select(x =>
+                errores = e.Value!.Errors.Select(x =>
                     string.IsNullOrWhiteSpace(x.ErrorMessage)
                         ? "Valor inválido."
                         : x.ErrorMessage
-                )
-            });
+                ).ToList()
+            })
+            .ToList();
 
         var problemDetails = new ProblemDetails
         {
@@ -83,6 +89,7 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         return new BadRequestObjectResult(problemDetails);
     };
 });
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

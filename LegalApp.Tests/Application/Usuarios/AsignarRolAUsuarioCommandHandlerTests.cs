@@ -76,8 +76,7 @@ namespace Tests.Application.Usuarios
             // Arrange
             _usuarioRepositorioMock
                 .Setup(r => r.ObtenerPorIdAsync(It.IsAny<int>()))
-                .ReturnsAsync((Usuario)null);
-
+                .ReturnsAsync((Usuario?)null);
             var command = new AsignarRolAUsuarioCommand
             {
                 UsuarioId = 99,
@@ -108,7 +107,7 @@ namespace Tests.Application.Usuarios
 
             _rolRepositorioMock
                 .Setup(r => r.ObtenerPorNombreAsync(It.IsAny<string>()))
-                .ReturnsAsync((Rol)null);
+                .ReturnsAsync((Rol?)null);
 
             var command = new AsignarRolAUsuarioCommand
             {

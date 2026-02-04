@@ -619,9 +619,7 @@ if (estadoVisual === "Pendiente") {
     console.error("❌ Error al cargar caso:", err);
     Swal.fire("Error", "No se pudo cargar el caso", "error");
 }
-
-        }
-     
+        }    
         // 🗑️ Eliminar con SweetAlert (esto va *fuera* del bloque de editar)
         if (e.target.closest(".btn-eliminar")) {
             const btn = e.target.closest(".btn-eliminar");
@@ -957,9 +955,7 @@ function onModuloCargado(moduloId) {
       break;
 
     case "mod-usuarios":
-      if (typeof cargarUsuariosDesdeBackend === "function") {
-        cargarUsuariosDesdeBackend();
-      }
+      window.initUsuariosModule?.();   
       break;
   }
 }

@@ -6,7 +6,7 @@ namespace Aplicacion.Repositorio
     public interface ICasoRepository
     {
         Task CrearAsync(Caso nuevoCaso);
-        Task<Caso> ObtenerPorIdAsync(int casoId);
+        Task<Caso?> ObtenerPorIdAsync(int casoId);
         Task<IEnumerable<Caso>> ObtenerTodosAsync();
         Task ActualizarAsync(Caso caso);
         Task<Caso?> ObtenerPorId(int id);

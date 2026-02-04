@@ -39,7 +39,7 @@ namespace Tests.Application.Usuarios
         {
             _rolRepositorioMock
                 .Setup(r => r.ObtenerPorNombreAsync(It.IsAny<string>()))
-                .ReturnsAsync((Rol)null);
+                .ReturnsAsync((Rol?)null);
 
             var command = new QuitarRolAUsuarioCommand(2, "Admin");
 
@@ -63,7 +63,7 @@ namespace Tests.Application.Usuarios
 
             _usuarioRepositorioMock
                 .Setup(r => r.ObtenerPorIdAsync(It.IsAny<int>()))
-                .ReturnsAsync((Usuario)null);
+                .ReturnsAsync((Usuario?)null);
 
             var command = new QuitarRolAUsuarioCommand(99, "Admin");
 

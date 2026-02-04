@@ -79,7 +79,7 @@ namespace Tests.Application.Usuarios
 
             _usuarioRepositorioMock
                 .Setup(r => r.ObtenerPorIdAsync(usuarioId))
-                .ReturnsAsync((Usuario)null);
+                .ReturnsAsync((Usuario?)null);
 
             // Act & Assert
             await Assert.ThrowsAsync<NotFoundException>(() =>

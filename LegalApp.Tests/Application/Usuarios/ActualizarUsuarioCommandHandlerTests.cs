@@ -5,7 +5,6 @@ using Aplicacion.Usuarios.Commands;
 using Aplicacion.Usuarios.Handlers;
 using Dominio.Entidades;
 using Moq;
-using Xunit;
 
 namespace Aplicacion.Tests.Usuarios
 {
@@ -80,10 +79,9 @@ namespace Aplicacion.Tests.Usuarios
         [Fact]
         public async Task Handle_DeberiaLanzarNotFoundException_SiUsuarioNoExiste()
         {
-            // Arrange
             _repositorioMock
                 .Setup(r => r.ObtenerPorIdAsync(It.IsAny<int>()))
-                .ReturnsAsync((Usuario)null);
+                .ReturnsAsync((Usuario?)null);
 
             var command = new ActualizarUsuarioCommand(
                 99,
