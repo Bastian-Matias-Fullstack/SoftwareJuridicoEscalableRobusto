@@ -5,44 +5,83 @@ let choicesUsuarios;
 let choicesRoles;
 const apiBase = "/api";
 
-async function cargarUsuarios() {
-    const res = await fetch(`${apiBase}/usuarios`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
-        }
-    });
+async function cargarUsuariosEnRoles() {
+  const response = await fetch(`/api/usuarios?ts=${Date.now()}`, {
+    cache: "no-store",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
+    }
+  });
+  const usuarios = await response.json();
+  const select = document.getElementById("selectUsuarios");
+  if (!select) return;
+  // destruir Choices si ya existe
+  if (choicesUsuarios) {
+    choicesUsuarios.destroy();
+    choicesUsuarios = null;
+  }
+  // limpiar y reconstruir el <select>
+  select.innerHTML = "";
+  // Placeholder inicial (sin selección)
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Seleccione un usuario";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    select.appendChild(placeholder);
 
-    const usuarios = await res.json();
-    // Usa Choices.js para setear opciones
-    choicesUsuarios.clearChoices();
-    choicesUsuarios.setChoices(
-        usuarios.map(u => ({ value: u.id, label: u.nombre })),
-        'value',
-        'label',
-        true
-    );
+  usuarios.forEach(u => {
+    const option = document.createElement("option");
+    option.value = u.id;
+    option.textContent = u.nombre;
+    select.appendChild(option);
+  });
+  // recrear Choices desde cero
+  choicesUsuarios = new Choices(select, {
+    searchEnabled: false,
+    shouldSort: false,
+    itemSelectText: "",
+  });
+    choicesUsuarios.setChoiceByValue("");
+  // re-aplicar clase visual
 }
-
-
+window.refrescarUsuariosEnRoles = async function () {
+  await cargarUsuariosEnRoles();
+};
 async function cargarRoles() {
     const res = await fetch(`${apiBase}/roles`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("jwt_token")}`
         }
     });
-
+        if (!res.ok) {
+      throw new Error("No se pudieron cargar los roles");
+    }
     const roles = await res.json();
+      if (!choicesRoles) {
+      console.error("choicesRoles no está inicializado");
+      return;
+    }
 
     choicesRoles.clearChoices();
-    choicesRoles.setChoices(
-        roles.map(r => ({ value: r.nombre, label: r.nombre })),
+    choicesRoles.setChoices([
+      {
+        value: "",
+        label: "Seleccione un rol",
+        selected: true,
+        disabled: true
+      },
+       ...roles.map(r => ({
+      value: r.nombre,
+      label: r.nombre
+    }))],
+      
         'value',
         'label',
         true
     );
+      choicesRoles.setChoiceByValue("");
 }
-
-
 async function cargarRolesAsignados(usuarioId) {
     const res = await fetch(`${apiBase}/roles/${usuarioId}`, {
 
@@ -72,11 +111,8 @@ async function cargarRolesAsignados(usuarioId) {
     });
 }
 
-// ===========================
-// 🔐 MÓDULO DE GESTIÓN DE ROLES
-// ===========================
-
-// ⏳ Cargar roles asignados al cambiar usuario
+//  MÓDULO DE GESTIÓN DE ROLES
+// Cargar roles asignados al cambiar usuario
 
 document.getElementById("selectUsuarios")?.addEventListener("change", (e) => {
     const usuarioId = e.target.value;
@@ -141,9 +177,7 @@ document.getElementById("btnAsignarRol")?.addEventListener("click", async () => 
         });
     }
 });
-
-
-// ❌ Quitar rol (debe ir FUERA del bloque de asignar)
+// Quitar rol (debe ir FUERA del bloque de asignar)
 
     document.addEventListener("click", async (e) => {
 
@@ -203,9 +237,6 @@ document.getElementById("btnAsignarRol")?.addEventListener("click", async () => 
             }
         }
     });
-
-
-
     /* VALIDAMOS si el usuario tiene multiples roles a la vez para saber que mostrar */
 function verificarAccesoPorRol(rolesPermitidos = []) {
     const token = localStorage.getItem("jwt_token");
@@ -219,14 +250,11 @@ function verificarAccesoPorRol(rolesPermitidos = []) {
         });
         return false;
     }
-
     try {
         const payload = JSON.parse(atob(token.split(".")[1]));
         const rol = payload["role"] || payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
         const roles = Array.isArray(rol) ? rol : [rol];
         const tieneAcceso = roles.some(r => rolesPermitidos.includes(r));
-
         if (!tieneAcceso) {
             Swal.fire({
                 icon: "error",
@@ -240,7 +268,6 @@ function verificarAccesoPorRol(rolesPermitidos = []) {
             });
             return false;
         }
-
         return true;
     } catch (error) {
         console.error("Error al verificar el token:", error);
@@ -255,29 +282,18 @@ function verificarAccesoPorRol(rolesPermitidos = []) {
         return false;
     }
 }
-// ===========================
-// 🚀 INICIALIZACIÓN AL CARGAR
-// ===========================
+// INICIALIZACIÓN AL CARGAR
 window.initRolesModule = function () {
     if (!verificarAccesoPorRol(["Admin"])) return;
     document.getElementById("seccion-gestion-roles")?.classList.remove("d-none");
-
     // Aquí va TODO lo que ya tenías en tu roles.js
-    choicesUsuarios = new Choices("#selectUsuarios", {
-        searchEnabled: false,
-        shouldSort: false,
-        itemSelectText: "",
-    });
 
     choicesRoles = new Choices("#selectRoles", {
         searchEnabled: false,
         shouldSort: false,
         itemSelectText: "",
     });
-
-    document.querySelector("#selectUsuarios").closest(".choices").classList.add("input-glass");
-    document.querySelector("#selectRoles").closest(".choices").classList.add("input-glass");
-
-    cargarUsuarios();
+    cargarUsuariosEnRoles();
+   
     cargarRoles();
 };

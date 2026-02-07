@@ -1,4 +1,11 @@
-﻿       function obtenerRolesDesdeJWT() {
+﻿function CanAccess(moduloId, rol) {
+  if (rol === "Admin") return true;
+  if (rol === "Abogado") return moduloId === "mod-casos" || moduloId === "mod-dashboard";
+  if (rol === "Soporte") return moduloId === "mod-usuarios" || moduloId === "mod-dashboard";
+  return false;
+}
+      
+function obtenerRolesDesdeJWT() {
         const token = localStorage.getItem("jwt_token");
         if (!token) return [];
         try {
@@ -68,9 +75,30 @@
         }
     }
     function navigate(moduloId) {
-    // 1️⃣ Mostrar módulo
-    mostrarModulo(moduloId);
+    const roles = obtenerRolesDesdeJWT();
+    const rol = obtenerRolEfectivo(roles);
 
+    if (!CanAccess(moduloId,rol)){
+        //fallback seguro segun rol
+       const fallback =
+          rol === "Admin" ? "mod-dashboard" :
+          rol === "Abogado" ? "mod-casos" :
+          rol === "Soporte" ? "mod-usuarios" :
+         "mod-dashboard";
+
+      Swal?.fire?.({
+      icon: "warning",
+      title: "Acceso denegado",
+      text: "No tienes permisos para acceder a este módulo."
+    });
+
+      // 1️⃣ Mostrar módulo
+    mostrarModulo(fallback);
+    return;
+    }
+
+    mostrarModulo(moduloId);
+  
     // 2️⃣ Estado activo del menú
     document.querySelectorAll(".sidebar-menu li")
         .forEach(li => li.classList.remove("active"));
@@ -129,10 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById("nav-casos")?.remove();
         }
     }
-
-    // ===============================
     // 🔹 INICIALIZACIÓN DE LA UI
-    // ===============================
     // 2️⃣ Configurar qué opciones del sidebar se muestran
     configurarSidebarPorRol(rol);
     aplicarVisibilidadPorRol(roles);
@@ -955,8 +980,13 @@ function onModuloCargado(moduloId) {
       break;
 
     case "mod-usuarios":
-      window.initUsuariosModule?.();   
+      window.initUsuariosModule?.();
       break;
+
+    case "mod-roles":
+      window.refrescarUsuariosEnRoles?.();
+      break;
+
   }
 }
 

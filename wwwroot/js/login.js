@@ -70,7 +70,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         const token = data.token;
         localStorage.setItem("jwt_token", token);
        
-        // ✅ Decodificar manualmente
+        // Decodificar manualmente
         const payloadBase64 = token.split('.')[1];
         const payloadJson = atob(payloadBase64);
         const payload = JSON.parse(payloadJson);
@@ -83,18 +83,17 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         };
 
         localStorage.setItem("usuario_actual", JSON.stringify(usuario));
+        // 🔹 Leer el contexto demo que ya guardaste arriba (casos|roles|usuarios)
+        const ctx = sessionStorage.getItem("demoContext");
 
-        //// Guarda datos del usuario (puedes expandir esto según lo que devuelva tu backend)
-        //const usuario = {
-        //    email: data.email,
-        //    nombre: data.nombre || "Usuario",
-        //    rol: data.rol
-        //};
-        //localStorage.setItem("usuario_actual", JSON.stringify(usuario));
+        let hash = "";
+        if (ctx === "casos") hash = "#casos";
+        else if (ctx === "roles") hash = "#roles";
+        else if (ctx === "usuarios") hash = "#usuarios";
 
-        // Redirigir inmediatamente
-
-        window.location.href = "dashboard.html";
+        // Limpieza opcional para no reutilizarlo en el siguiente login
+        sessionStorage.removeItem("demoContext");
+                window.location.href = "dashboard.html" + hash;
 
 
 

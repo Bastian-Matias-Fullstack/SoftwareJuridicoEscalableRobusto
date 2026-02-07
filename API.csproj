@@ -36,7 +36,6 @@
 	  <Content Remove="appsettings.Example.Development.json" />
 	  <Content Remove="appsettings.Example.json" />
 	  <Content Remove="appsettings.Example.Production.json" />
-	  <Content Remove="appsettings.Production.json" />
 	</ItemGroup>
 
 

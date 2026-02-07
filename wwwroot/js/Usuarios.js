@@ -173,9 +173,6 @@ if (esNuevo) {
     }
 }
 
-
-
-
     // ✅ Primero crea el objeto
     const payload = { nombre, email };
     // ✅ Luego agrega la contraseña solo si se escribió
@@ -211,7 +208,8 @@ if (!btnSubmit) {
 
         Swal.fire("Éxito", id ? "Usuario actualizado" : "Usuario creado", "success");
         bootstrap.Modal.getInstance(document.getElementById("modalUsuario")).hide();
-        cargarUsuarios();
+       await cargarUsuarios(); //mejor esperar
+       window.refrescarUsuariosEnRoles?.(); //avisa al módulo Roles si está listo
     } catch (error) {
         console.error(error);
         Swal.fire("Error", error.message, "error");

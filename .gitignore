@@ -42,6 +42,7 @@ package-lock.json
 appsettings.json
 appsettings.Development.json
 appsettings.Local.json
+appsettings.Production.json
 appsettings.*.json
 .env
 *.secret.json
@@ -85,13 +86,7 @@ wwwroot/lib/
 # -------------------------------
 # VISUAL STUDIO / .NET BUILD
 # -------------------------------
-
-## VS Config y metadata
-.vs/
-*.user
-*.suo
-*.vsidx
-*.sln.docstates
+publish/
 
 ## Build outputs
 bin/
