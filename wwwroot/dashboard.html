@@ -385,7 +385,7 @@
                 //  NUEVO: lógica para cargar el módulo de usuarios
                 if (rolesArray.includes("Admin") || rolesArray.includes("Soporte")) {
                     const scriptUsuarios = document.createElement("script");
-                    scriptUsuarios.src = "/js/usuarios.js";
+                    scriptUsuarios.src = "/js/Usuarios.js";
                     scriptUsuarios.onload = () => {
                         if (window.initUsuariosModule) {
                             window.initUsuariosModule(); // << ESTE arranca todo

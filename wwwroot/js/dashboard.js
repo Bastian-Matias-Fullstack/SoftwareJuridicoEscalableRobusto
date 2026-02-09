@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (rol === "Soporte") {
         navigate("mod-usuarios");
     }
-    const apiUrl = "https://localhost:7266/api/Casos";
+    const apiUrl = "api/Casos";
     /*➡️ Define la URL base para la API de casos.
     */
     const token = localStorage.getItem("jwt_token");
@@ -877,7 +877,7 @@ if (submitBtn) {
 
         const esNuevo = id === "";
 
-        const url = esNuevo ? "https://localhost:7266/api/Casos" : `https://localhost:7266/api/Casos/${id}`;
+        const url = esNuevo ? apiUrl : `${apiUrl}/${id}`;
         const metodo = esNuevo ? "POST" : "PUT";
 
             let response; 
@@ -998,14 +998,12 @@ function toggleSidebar() {
         ?.classList.toggle("collapsed");
 }
 
-
 async function cargarClientes() {
-    const response = await fetch("https://localhost:7266/api/Clientes", {
+    const response = await fetch("/api/Clientes", {
         headers: {
             "Authorization": `Bearer ${token}`
         }
     });
-
     const clientes = await response.json();
     const select = document.getElementById("form-cliente");
 
